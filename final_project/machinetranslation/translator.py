@@ -1,37 +1,13 @@
-#import json
-import os
-from ibm_watson import LanguageTranslatorV3
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from dotenv import load_dotenv
-#import pandas
-#from pandas import json_normalize
+''' Code for translator '''
 
-load_dotenv()
-apikey=os.environ['apikey']
-url=os.environ['url']
+from deep_translator import MyMemoryTranslator
 
-authenticator = IAMAuthenticator(apikey)
-language_translator = LanguageTranslatorV3(
-    version='2018-05-01',
-    authenticator=authenticator
-)
-
-language_translator.set_service_url(url)
-
-#print(json_normalize(language_translator.list_identifiable_languages().get_result(), "languages"))
-
-def englishtofrench(englishtext):
-    if englishtext =='':
-        return 'Empty'
-    translation_new = language_translator.translate(text=englishtext ,model_id='en-fr').get_result()
-    french_text= translation_new['translations'][0]['translation']
+def english_to_french(english_text):
+    "Function to change english to french"
+    french_text = MyMemoryTranslator(source='en-GB', target='fr-FR').translate(english_text)
     return french_text
-def frenchtoenglish(frenchtext):
-    if frenchtext =='':
-        return 'Empty'
-    translation_new = language_translator.translate(text=frenchtext ,model_id='fr-en').get_result()
-    english_text= translation_new['translations'][0]['translation']
-    return english_text
 
-print(englishtofrench(''))
-print(frenchtoenglish('Bonjour'))
+def french_to_english(french_text):
+    "Function to change french to english"
+    english_text = MyMemoryTranslator(source='fr-FR', target='en-GB').translate(french_text)
+    return english_text
